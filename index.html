@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">New York Times search  📰 </h1>
+          <p class="lead"></p>
+        </div>
+      </div>
+      <div class="col-10">
+        <div class="card">
+            <div class="card-header">
+                Search Perameters 📰
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                      <label class="searchText"></label>Search Term</label>
+                      <input type="email" class="form-control answer" id="exampleInputEmail1" aria-describedby="emailHelp" >
+                      <div class="dropdown">
+                        <div class="form-group">
+                            <label class="searchText" for="exampleFormControlSelect1">Example select</label>
+                            <select class="form-control dropDown" id="exampleFormControlSelect1">
+                              <option>1</option>
+                              <option>2</option>
+                              <option>3</option>
+                              <option>4</option>
+                              <option>5</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <form>
+                        <div class="form-group">
+                          <label class="searchText" >Start Year (optional)</label>
+                          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" >
+                          <form>
+                            <div class="form-group">
+                              <label class="searchText">End Year (optional)</label>
+                              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">    
+                              <div class="card-body">
+                                <button href="#" class="card-link search">Search</button>
+                                <button href="#" class="card-link">Clear Results</button>
+                              </div>
+                        </div>
+                </div>
+          </div>
+      </div>
+<div class="col-12">
+    <div class="card">
+  <div class="card-header">
+    Top Articles
+  </div>
+  <div class="card-body articles-here">
+  </div>
+</div>
+</div>
+<footer>
+    <h1>Est. 2020</h1>
+  </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+// document.querySelectorAll('.searchText')[0].value;
+
+$('button').on('click', function(){
+    var filter = $('.answer').val()
+    var amount = $(".dropDown").val()
+    var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="
+    + filter + "&api-key=lIMGoAM32EVQUkojGCvnvtRq6Ks362eu&limit=10"
+    console.log(queryURL)
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function(response){
+        var results = response.response.docs
+        console.log(response)
+        console.log(results)
+        for (var i = 0; i < amount; i++){
+        var images = results[i].multimedia[19].url
+        var newDiv = $('<div>')
+        var articleTitle = $('<h2>').text(results[i].headline.main)
+        var articleAuthor = $('<h3>').text(results[i].byline.original)
+        var articleSummary = $('<p>')
+        articleSummary.text(results[i].abstract)
+        var artImage = $('<img>')
+        artImage.attr('src', images)
+        var artLink = $('<a>').text("URL: " + results[i].web_url)
+        artLink.attr('href', results[i].web_url)
+        newDiv.append(articleTitle)
+        newDiv.append(articleAuthor)
+        newDiv.append(articleSummary)
+        // newDiv.append(artImage)
+        newDiv.append(artLink)
+        $('.articles-here').prepend(newDiv)
+        }
+    })
+})
+</script>
+</body>
+</html>
+
